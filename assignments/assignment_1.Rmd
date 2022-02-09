@@ -1,0 +1,19 @@
+---
+title: "Assignment 1"
+author: "Roshni Katrak-Adefowora"
+date: "2/7/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Why I am taking this course
+One reason I taking this course because I would like to practice and improve my coding skills, particularly when it comes to loops (which I struggle with!). I also do not have experience writing functions (outside of a brief introduction in Allison's data analysis course at Bren), so I am interested in learning how to do that as well. Lastly, I am planning to take Environmental Modeling in the spring, and would like to apply the skills I learn in both classes to my current research.
+
+
+## Data science background
+I learned to code during undergrad, when I joined a computational biology lab. I also took data science courses (biostatistics and computational biology) in undergrad, and took Advanced Data Analysis at Bren. I've worked on various conservation- and community science-related research projects during my undergrad and at Bren, as well as in past jobs and internships, all of which were based in data science. I am currently a TA for an intro data science course, in which students are learning how to code and wrangle data.
+
