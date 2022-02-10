@@ -1,5 +1,5 @@
 ---
-title: "Assignment 2: Design Program"
+title: "Assignment 1b: Modularity"
 author: "Roshni Katrak-Adefowora, Genevieve Chiong, Kristin Gill"
 date: "2/9/2022"
 output: html_document
@@ -7,4 +7,70 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(png)
 ```
+
+
+# Contract for overall program 
+The goal for this overall program is to create an ArcGIS layer with optimal locations for green infrastructure, specifically rain gardens, in the Maunalua Bay Region, O'ahu, Hawai'i. We created three models that take in inputs and produce outputs. One model determines suitable locations for rain gardens, another determines runoff hotspots, and the third combines this information to determine the optimal locations for rain gardens—given rain garden site suitability and areas of high runoff. 
+
+## Module 1 
+**Inputs** 
+
+* Soil Curve Numbers
+* DEM (slope)
+* Parks
+* Roads
+* Buildings
+* Wetlands
+* Streams
+* Stormwater drains
+* Flood zones
+
+**Parameters**
+
+* Slope: < 6% 
+* 10 feet buffer around buildings - to eliminate
+* Sidewalk, wetland, stream, stormwater drains, park, and flood zones multi-buffer with increasing distance given decreasing value
+* Soil curve number: increasing number given increasing value
+
+**Output**
+
+* Suitable locations for rain gardens
+
+## Module 2 
+**Inputs**
+
+* Average Annual Rainfall
+* DEM (slope)
+
+**Parameters**
+
+* less than 30,000 mm rainwater per cell per year 
+
+**Output**  
+
+* Areas of high stormwater flow 
+
+## Module 3 
+**Inputs** 
+
+* Module 1 Output 
+* Module 2 Output 
+
+**Output** 
+
+* Optimal locations for rain gardens given location suitability and high runoff 
+
+![hi](diagram.jpg)
+
+```{r}
+#readPNG(here("diagram_1b."))
+```
+
+```{r}
+
+```
+
