@@ -64,6 +64,6 @@ The goal for this overall program is to create an ArcGIS layer with optimal loca
 
 * Optimal locations for rain gardens given location suitability and high runoff 
 
-![](/Users/kjstg/OneDrive/Documents/Bren/Year 2/Winter/Computing/roshni/ESM262/assignments/diagram.jpg)
+![](../assignments/diagram.jpg))
 
 
