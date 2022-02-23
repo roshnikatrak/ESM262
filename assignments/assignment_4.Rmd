@@ -1,24 +1,73 @@
 ---
 title: "Assignment 4"
-author: "Roshni Katrak-Adefowora"
+author: "Roshni Katrak-Adefowora and Genevieve Chiong"
 date: "2/23/2022"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(purrr)
+library(ggpubr)
 ```
 
 ```{r}
+
+# For Loop
 source("../R/kit_fox_resistance.R")
 
 landcover <- data.frame(land_cover = c("Grassland and Herbaceous", "Pasture", "Urban", "Fallowed", "Roads"),
                 suitability_score = c(80, 30, 20, 50, 0))
 
+landcover2 <- as.data.frame(matrix(nrow = length(sensitivity),
+                                   ncol = nrow(landcover)))
+
 sensitivity <- c(0.25, 0.5, 1)
 
 for (i in 1:nrow(landcover)) {
-  landcover[,i] = kit_fox_resistance(h=landcover$suitability_score[i], c=sensitivity)
+  landcover2[,i] = kit_fox_resistance(h = landcover$suitability_score[i], c = sensitivity)
 }
+
+colnames(landcover2) = landcover$land_cover
+
+landcover2_4 <- landcover2 %>% pivot_longer(cols = everything(),
+                                             names_to = "landcover", 
+                                             values_to = "resistance") 
+
 ```
+
+```{r}
+# Pmap
+
+resistance_pmap <- pmap(list(h = landcover$suitability_score[i]), 
+                        kit_fox_resistance,
+                        c = sensitivity)
+
+resistance_pmap2 <- as.data.frame(resistance_pmap, col.names = possible_cars)
+
+
+# turn into a data frame
+powerall2 <- as.data.frame(powerall2, col.names = possible_cars$name)
+
+# turn columns into rows 
+powerallr2 <- powerall2 %>% pivot_longer(cols = everything(),
+                                         names_to = "car",
+                                         values_to = "power")
+
+method2_plot <-  ggplot(data = powerallr2, 
+                        aes(x = car,
+                            y = power, 
+                            fill=car)) + 
+  geom_boxplot() + 
+  ggtitle("Pmap")
+
+method2_plot
+```
+
+
+
+
+
 
