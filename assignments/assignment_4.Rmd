@@ -17,98 +17,65 @@ source("../R/kit_fox_resistance.R")
 
 ```{r}
 # For Loop
-landcover <- data.frame(land_cover = c("Grassland and Herbaceous", "Pasture", "Urban", "Fallowed", "Roads"),
+possible_landcover <- data.frame(landcover = c("Grassland and Herbaceous", "Pasture", "Urban", "Fallowed", "Roads"),
                 suitability_score = c(80, 30, 20, 50, 0))
 
 sensitivity <- c(0.25, 0.5, 1)
 
-landcover2 <- as.data.frame(matrix(nrow = length(sensitivity),
-                                   ncol = nrow(landcover)))
+resistance1 <- as.data.frame(matrix(nrow = length(sensitivity),
+                                   ncol = nrow(possible_landcover)))
 
-for (i in 1:nrow(landcover)) {
-  landcover2[,i] = kit_fox_resistance(h = landcover$suitability_score[i], c = sensitivity)
+for (i in 1:nrow(possible_landcover)) {
+  resistance1[,i] = kit_fox_resistance(h = possible_landcover$suitability_score[i], c = sensitivity)
 }
 
-colnames(landcover2) <- landcover$land_cover
-rownames(landcover2) <- sensitivity
+colnames(resistance1) <- possible_landcover$landcover
+rownames(resistance1) <- sensitivity
 
-landcover2_r <- landcover2 %>% pivot_longer(cols = everything(),
+resistance1r <- resistance1 %>% pivot_longer(cols = everything(),
                                              names_to = "landcover", 
                                              values_to = "resistance") 
 
-forloop_plot <- ggplot(data = landcover2_r, 
+resistance1r_plot <- ggplot(data = resistance1r, 
                        aes(x = landcover,
                            y = resistance, 
                            fill = landcover)) + 
   geom_col() +
   ggtitle("For Loop")
 
-forloop_plot
+resistance1r_plot
 
 ```
 
 ```{r}
 # Pmap
 
-resistance_pmap <- pmap(list(h = landcover$suitability_score[i]), 
+resistance_pmap <- pmap(list(h = landcover$suitability_score), 
                         kit_fox_resistance,
                         c = sensitivity)
+powerall2 <- pmap(list(A = possible_cars$area, m=possible_cars$mass), 
+                  auto_power_gen, 
+                  V=speeds)
 
-resistance_pmap2 <- as.data.frame(resistance_pmap, col.names = possible_cars)
+powerall2 <- as.data.frame(powerall2, col.names = possible_cars$name) 
+#resistance_pmap2 <- as.data.frame(resistance_pmap, col.names = landcover$land_cover)
 
+resistance_pmap2 <- as.data.frame(matrix(nrow = length(sensitivity),
+                                   ncol = nrow(landcover)))
 
-# turn into a data frame
-powerall2 <- as.data.frame(powerall2, col.names = possible_cars$name)
+resistance_pmap2r <- resistance_pmap2 %>% pivot_longer(cols = everything(),
+                                                       names_to = "landcover",
+                                                       values_to = "resistance")
 
-# turn columns into rows 
-powerallr2 <- powerall2 %>% pivot_longer(cols = everything(),
-                                         names_to = "car",
-                                         values_to = "power")
-
-method2_plot <-  ggplot(data = powerallr2, 
-                        aes(x = car,
+method2_plot <-  ggplot(data = resistance_pmap2r, 
+                        aes(x = ,
                             y = power, 
                             fill=car)) + 
   geom_point() + 
   ggtitle("Pmap")
 
-method2_plot
 ```
 
-
-
-```{r}
-nsample = 200
-mean_speed = log(100*0.277)
-
-speeds = rlnorm(mean = mean_speed,
-                sd = 0.1 * mean_speed,
-                nsample)
-
-plot(density(speeds),
-     ylab = "Distribution of Speeds in (m/s)")
-
-powerall2 <- pmap(list(A = possible_cars$area, m=possible_cars$mass), 
-                  auto_power_gen, 
-                  V=speeds)
-
-# turn into a data frame
-powerall2 <- as.data.frame(powerall2, col.names = possible_cars$name)
-
-# turn columns into rows 
-powerallr2 <- powerall2 %>% pivot_longer(cols = everything(),
-                                         names_to = "car",
-                                         values_to = "power")
-
-method2_plot <-  ggplot(data = powerallr2, 
-                        aes(x = car,
-                            y = power, 
-                            fill=car)) + 
-  geom_boxplot() + 
-  ggtitle("Pmap")
-
-method2_plot
-```
 
 
 
