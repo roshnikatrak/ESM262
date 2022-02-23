@@ -1,0 +1,30 @@
+---
+title: "loop_practice"
+author: "Roshni Katrak-Adefowora"
+date: "2/16/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#single value of annual fertilizer and annual total precipitation
+for (i in 10) {
+  base_yield = 1.8 * 5^2 - 0.5 * 5 + 0.3 * 20
+}
+
+#vector for fertilizer and precipitation
+fertilizer = rnorm(mean=5, sd=0.5, n=10)
+precip = rnorm(mean=20, sd=2, n=10)
+
+#make data frame with fertilizer and precip
+crop <- data.frame(fertilizer, precip)
+
+#get yield values for each fertilizer
+for (i in 1:10) {
+  crop$vector_yield[i] = 1.8 * fertilizer[i]^2 - 0.5 * fertilizer[i] + 0.3 * precip[i]
+}
+```
+

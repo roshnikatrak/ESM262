@@ -1,0 +1,24 @@
+---
+title: "Assignment 4"
+author: "Roshni Katrak-Adefowora"
+date: "2/23/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+source("../R/kit_fox_resistance.R")
+
+landcover <- data.frame(land_cover = c("Grassland and Herbaceous", "Pasture", "Urban", "Fallowed", "Roads"),
+                suitability_score = c(80, 30, 20, 50, 0))
+
+sensitivity <- c(0.25, 0.5, 1)
+
+for (i in 1:nrow(landcover)) {
+  landcover[,i] = kit_fox_resistance(h=landcover$suitability_score[i], c=sensitivity)
+}
+```
+
