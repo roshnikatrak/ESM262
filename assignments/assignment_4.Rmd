@@ -11,30 +11,39 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(purrr)
 library(ggpubr)
+
+source("../R/kit_fox_resistance.R")
 ```
 
 ```{r}
-
 # For Loop
-source("../R/kit_fox_resistance.R")
-
 landcover <- data.frame(land_cover = c("Grassland and Herbaceous", "Pasture", "Urban", "Fallowed", "Roads"),
                 suitability_score = c(80, 30, 20, 50, 0))
 
+sensitivity <- c(0.25, 0.5, 1)
+
 landcover2 <- as.data.frame(matrix(nrow = length(sensitivity),
                                    ncol = nrow(landcover)))
-
-sensitivity <- c(0.25, 0.5, 1)
 
 for (i in 1:nrow(landcover)) {
   landcover2[,i] = kit_fox_resistance(h = landcover$suitability_score[i], c = sensitivity)
 }
 
-colnames(landcover2) = landcover$land_cover
+colnames(landcover2) <- landcover$land_cover
+rownames(landcover2) <- sensitivity
 
-landcover2_4 <- landcover2 %>% pivot_longer(cols = everything(),
+landcover2_r <- landcover2 %>% pivot_longer(cols = everything(),
                                              names_to = "landcover", 
                                              values_to = "resistance") 
+
+forloop_plot <- ggplot(data = landcover2_r, 
+                       aes(x = landcover,
+                           y = resistance, 
+                           fill = landcover)) + 
+  geom_col() +
+  ggtitle("For Loop")
+
+forloop_plot
 
 ```
 
@@ -47,6 +56,41 @@ resistance_pmap <- pmap(list(h = landcover$suitability_score[i]),
 
 resistance_pmap2 <- as.data.frame(resistance_pmap, col.names = possible_cars)
 
+
+# turn into a data frame
+powerall2 <- as.data.frame(powerall2, col.names = possible_cars$name)
+
+# turn columns into rows 
+powerallr2 <- powerall2 %>% pivot_longer(cols = everything(),
+                                         names_to = "car",
+                                         values_to = "power")
+
+method2_plot <-  ggplot(data = powerallr2, 
+                        aes(x = car,
+                            y = power, 
+                            fill=car)) + 
+  geom_point() + 
+  ggtitle("Pmap")
+
+method2_plot
+```
+
+
+
+```{r}
+nsample = 200
+mean_speed = log(100*0.277)
+
+speeds = rlnorm(mean = mean_speed,
+                sd = 0.1 * mean_speed,
+                nsample)
+
+plot(density(speeds),
+     ylab = "Distribution of Speeds in (m/s)")
+
+powerall2 <- pmap(list(A = possible_cars$area, m=possible_cars$mass), 
+                  auto_power_gen, 
+                  V=speeds)
 
 # turn into a data frame
 powerall2 <- as.data.frame(powerall2, col.names = possible_cars$name)
