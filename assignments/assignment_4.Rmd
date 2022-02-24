@@ -18,9 +18,9 @@ source("../R/kit_fox_resistance.R")
 ```{r}
 # For Loop
 possible_landcover <- data.frame(landcover = c("Grassland and Herbaceous", "Pasture", "Urban", "Fallowed", "Roads"),
-                suitability_score = c(80, 30, 20, 50, 0))
+                suitability_score = c(0.8, 0.3, 0.2, 0.5, 0))
 
-sensitivity <- c(0.25, 0.5, 1)
+sensitivity <- c(0.25, 4, 16)
 
 resistance1 <- as.data.frame(matrix(nrow = length(sensitivity),
                                    ncol = nrow(possible_landcover)))
