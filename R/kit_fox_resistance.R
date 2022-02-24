@@ -5,7 +5,7 @@
 #' @param l resistance coefficient 2 (default = 99)
 #' @param c kit fox sensitivity to habitat suitability score 
 #' @param h habitat suitability score 
-#' @return resistance 
+#' @return resistance (ohm)
 #' 
 #function definition
 kit_fox_resistance = function(r=100, l=99, c, h) {
