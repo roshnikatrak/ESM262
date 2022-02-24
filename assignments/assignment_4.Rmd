@@ -11,13 +11,18 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(purrr)
 library(ggpubr)
+library(RColorBrewer)
 
 source("../R/kit_fox_resistance.R")
 ```
 
-```{r}
+```{r withforloop}
 # For Loop
-possible_landcover <- data.frame(landcover = c("Grassland and Herbaceous", "Pasture", "Urban", "Fallowed", "Roads"),
+possible_landcover <- data.frame(landcover = c("Grassland and Herbaceous", 
+                                               "Pasture", 
+                                               "Urban", 
+                                               "Fallowed", 
+                                               "Roads"),
                                  suitability_score = c(0.8, 0.3, 0.2, 0.5, 0))
 
 sensitivity <- c(0.25, 4, 16)
@@ -26,7 +31,8 @@ resistance1 <- as.data.frame(matrix(nrow = length(sensitivity),
                                     ncol = nrow(possible_landcover)))
 
 for (i in 1:nrow(possible_landcover)) {
-  resistance1[,i] = kit_fox_resistance(h = possible_landcover$suitability_score[i], c = sensitivity)
+  resistance1[,i] = kit_fox_resistance(h = possible_landcover$suitability_score[i], 
+                                       c = sensitivity)
 }
 
 colnames(resistance1) <- possible_landcover$landcover
@@ -41,42 +47,44 @@ resistance1r_plot <- ggplot(data = resistance1r,
                                 y = resistance, 
                                 fill = landcover)) + 
   geom_boxplot() +
-  ggtitle("For Loop")
+  ggtitle("Kit Fox Resistance Across a Landscape (For Loop)") + 
+  labs(x = "\nLand Cover",
+       y = "\nResistance",
+       fill = "Land Cover Type") +
+  scale_fill_brewer(palette = "Spectral") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))
 
 resistance1r_plot
 
 ```
 
-```{r}
+```{r withpmap}
 # Pmap
+resistance2 <- pmap(list(h = possible_landcover$suitability_score), 
+                    kit_fox_resistance,
+                    c = sensitivity)
 
-resistance_pmap <- pmap(list(h = landcover$suitability_score), 
-                        kit_fox_resistance,
-                        c = sensitivity)
-powerall2 <- pmap(list(A = possible_cars$area, m=possible_cars$mass), 
-                  auto_power_gen, 
-                  V=speeds)
+resistance2 <- as.data.frame(resistance2, col.names = possible_landcover$landcover)
 
-powerall2 <- as.data.frame(powerall2, col.names = possible_cars$name) 
-#resistance_pmap2 <- as.data.frame(resistance_pmap, col.names = landcover$land_cover)
+resistance2r <- resistance2 %>% pivot_longer(cols = everything(), 
+                                             names_to = "landcover",
+                                             values_to = "resistance")
 
-resistance_pmap2 <- as.data.frame(matrix(nrow = length(sensitivity),
-                                   ncol = nrow(landcover)))
+resistance2r_plot <- ggplot(data = resistance2r, 
+                            aes(x = landcover,
+                                y = resistance,
+                                fill = landcover)) +
+  geom_boxplot() + 
+  ggtitle("Kit Fox Resistance Across a Landscape (Pmap)") + 
+  labs(x = "\nLand Cover",
+       y = "\nResistance",
+       fill = "Land Cover Type") +
+  scale_fill_brewer(palette = "Set3") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) 
 
-resistance_pmap2r <- resistance_pmap2 %>% pivot_longer(cols = everything(),
-                                                       names_to = "landcover",
-                                                       values_to = "resistance")
-
-method2_plot <-  ggplot(data = resistance_pmap2r, 
-                        aes(x = ,
-                            y = power, 
-                            fill=car)) + 
-  geom_point() + 
-  ggtitle("Pmap")
+resistance2r_plot
 
 ```
-
-
 
 
 
