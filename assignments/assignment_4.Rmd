@@ -16,7 +16,7 @@ library(RColorBrewer)
 source("../R/kit_fox_resistance.R")
 ```
 
-```{r withforloop}
+```{r withforloop, warning = FALSE}
 # For Loop
 possible_landcover <- data.frame(landcover = c("Grassland and Herbaceous", 
                                                "Pasture", 
@@ -25,7 +25,7 @@ possible_landcover <- data.frame(landcover = c("Grassland and Herbaceous",
                                                "Roads"),
                                  suitability_score = c(0.8, 0.3, 0.2, 0.5, 0))
 
-sensitivity <- c(0.25, 4, 16)
+sensitivity <- c(-0.25, 4, 16)
 
 resistance1 <- as.data.frame(matrix(nrow = length(sensitivity),
                                     ncol = nrow(possible_landcover)))
@@ -52,13 +52,14 @@ resistance1r_plot <- ggplot(data = resistance1r,
        y = "\nResistance",
        fill = "Land Cover Type") +
   scale_fill_brewer(palette = "Spectral") +
-  scale_x_discrete(guide = guide_axis(n.dodge = 2))
+  scale_x_discrete(guide = guide_axis(n.dodge = 2))+
+  theme_bw()
 
 resistance1r_plot
 
 ```
 
-```{r withpmap}
+```{r withpmap, warning = FALSE}
 # Pmap
 resistance2 <- pmap(list(h = possible_landcover$suitability_score), 
                     kit_fox_resistance,
@@ -80,7 +81,8 @@ resistance2r_plot <- ggplot(data = resistance2r,
        y = "\nResistance",
        fill = "Land Cover Type") +
   scale_fill_brewer(palette = "Set3") +
-  scale_x_discrete(guide = guide_axis(n.dodge = 2)) 
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  theme_bw()
 
 resistance2r_plot
 
