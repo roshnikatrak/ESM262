@@ -10,7 +10,7 @@
 #' @return risk (very low, low, medium, high, very high) and n_extremes (number of extreme temperature days between 1988 and 2010)
 
 #function definition
-temp_risk = function(temperature_threshold_extreme = 35, temperature_threshold = 30, temperature, occupation, age, income) {
+temp_risk = function(temperature_threshold_extreme = 35, temperature_threshold = 30, temperature, occupation, age, income, x) {
   
   # temperature risk scale (0-100) if temperature has been 32 degrees or more for 3 or more consecutive days
   temp_risk_value = case_when(temperature < temperature_threshold ~ 0, #low risk
@@ -44,7 +44,10 @@ temp_risk = function(temperature_threshold_extreme = 35, temperature_threshold =
 
   #count number of extreme temperatures
   n_extremes = sum(temperature >= 35)
-    
-  return(list(risk, n_extremes))
+  
+  #only return risk if length is less than one (i.e., if adding to a column in a data frame)
+  if (length(x) <= 1)
+    return(risk) else
+      return(list(risk=risk, n_extremes=n_extremes))
 }
 

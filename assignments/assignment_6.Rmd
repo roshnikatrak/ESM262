@@ -33,15 +33,17 @@ population_risk <- data.frame(occupation, age, income, tmax$tmax) %>%
    mutate(occupation = ifelse(age == "child", "none", occupation))
  
  #add risk category
- population_risk$risk = temp_risk(temperature = population_risk$temp_max,
-          occupation = population_risk$occupation,
-          age = population_risk$age,
-          income = population_risk$income)
+ population_risk$risk <- temp_risk(x = population_risk$risk,
+                                   temperature = population_risk$temp_max,
+                                   occupation = population_risk$occupation,
+                                   age = population_risk$age,
+                                   income = population_risk$income)
  
  #return lists of risk and number of extremes
- risk <- temp_risk(temperature = population_risk$temp_max,
-          occupation = population_risk$occupation,
-          age = population_risk$age,
-          income = population_risk$income)
+ risk <- temp_risk(x = population_risk$risk,
+                   temperature = population_risk$temp_max,
+                   occupation = population_risk$occupation,
+                   age = population_risk$age,
+                   income = population_risk$income)
 ```
 
