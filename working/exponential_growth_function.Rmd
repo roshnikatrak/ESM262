@@ -1,0 +1,30 @@
+---
+title: "exponential growth function"
+author: "Roshni Katrak-Adefowora"
+date: "2/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+source("../R/exponential_growth.R")
+```
+
+```{r}
+exp_growth <- data.frame("Species" = c("A", "B", "C", "D"),
+                         "population" = c(50, 1000, 731, 300),
+                         "time" = c(10, 22, 100, 30),
+                         "growth_rate" = c(0.5, 0.25, 0.8, 0.99))
+
+exp_growth_results <- as.data.frame(matrix(nrow = length(exp_growth),
+                                    ncol = nrow(exp_growth)))
+
+for (i in 1:nrow(exp_growth)) {
+  exp_growth_results[,i] = exponential_growth(init_pop = exp_growth$population[i],
+                                              t = exp_growth$time[i],
+                                              r = exp_growth$growth_rate[i])
+}
+
+```
+

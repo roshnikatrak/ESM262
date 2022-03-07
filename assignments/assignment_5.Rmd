@@ -1,0 +1,28 @@
+---
+title: "Assignment 5"
+author: "Roshni Katrak-Adefowora"
+date: "3/1/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+
+source(here("R/fish.R"))
+```
+
+```{r}
+#read in data as vector
+fish_spp <- scan(here("assignments", "fish.txt"), character())
+fish_spp <- fish_spp[-1] #remove "x"
+
+#convert to factor
+fish_spp_fct <- as.factor(fish_spp)
+
+#apply function
+fish_metrics = fish(item = fish_spp)
+fish_metrics
+```
+
